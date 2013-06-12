@@ -119,10 +119,6 @@ class AssertHtmlFormContext(unittest.TestCase):
     def __exit__(self, exc_type, exc_value, tb):
         pass
 
-    def assertHtmlForm(self,
-                       response,
-                       form_name=None,
-                       action=None,
-                       method='POST'):
-        context = AssertHtmlFormContext(response, form_name, action, method)
+    def assertHtmlForm(self, res, form_name=None, action=None, method='POST'):
+        context = AssertHtmlFormContext(res, form_name, action, method)
         return context
