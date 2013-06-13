@@ -81,7 +81,7 @@ class AssertHtmlFormContext(object):
 
                 continue
 
-            self.fail("Input type %s not supported" % input['type'])
+            raise AssertionError("Input type %s not supported" % input['type'])
 
         # textareas
         for textarea in form.findAll('textarea'):
