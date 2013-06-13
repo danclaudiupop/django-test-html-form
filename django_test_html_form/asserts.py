@@ -1,9 +1,7 @@
-import unittest
-
 from bs4 import BeautifulSoup
 
 
-class AssertHtmlFormContext(unittest.TestCase):
+class AssertHtmlFormContext(object):
 
     def __init__(self, response, form_name, action, method):
         self.response = response
@@ -27,19 +25,23 @@ class AssertHtmlFormContext(unittest.TestCase):
                     "Couldn't find form with name %s on the page."
                     % self.form_name
                 )
-            self.fail(err)
+            raise AssertionError(err)
 
         if form['method'].lower() != self.method.lower():
-            self.fail(
+            err = (
                 "The form method %s is different than %s."
-                % (form['method'], self.method)
+                % form['method'], self.method
             )
+            raise AssertionError(err)
 
         if self.action is not None and form['action'] != self.action:
-            self.fail(
+            err = (
                 "The form action %s is different than %s."
                 % (form['action'], self.action)
             )
+            raise AssertionError(err)
+
+        return form
 
     def extract_fields(self, form):
         """
@@ -119,6 +121,7 @@ class AssertHtmlFormContext(unittest.TestCase):
     def __exit__(self, exc_type, exc_value, tb):
         pass
 
-    def assertHtmlForm(self, res, form_name=None, action=None, method='POST'):
-        context = AssertHtmlFormContext(res, form_name, action, method)
-        return context
+
+def assertHtmlForm(res, form_name=None, action=None, method='POST'):
+    context = AssertHtmlFormContext(res, form_name, action, method)
+    return context
